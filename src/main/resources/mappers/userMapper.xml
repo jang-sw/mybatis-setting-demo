@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.UserMapper">
+
+	<insert id="saveUser" parameterType="com.example.demo.dao.UserDao">
+        INSERT INTO tb_user (name, address, email)
+       	VALUES (#{name}, #{address}, #{email})
+    </insert>
+    
+    <select id="findUser" resultType="com.example.demo.dao.UserDao">
+        SELECT * FROM tb_user
+        <where>
+        	<choose>
+				<when test="id != null"> id=#{id} </when>
+				<otherwise> 
+					<if test="name != null" >AND name=#{name}</if>
+					<if test="address != null" >AND address=#{address}</if>
+					<if test="email != null" >AND email=#{email}</if>
+				</otherwise>
+			</choose>
+        </where>
+    </select>
+    
+    <update id="updateUser" parameterType="com.example.demo.dao.UserDao">
+        UPDATE tb_user
+        	<set>
+        		<if test="name != null" >name=#{name}</if>
+				<if test="address != null" >, address=#{address}</if>
+				<if test="email != null" >, email=#{email}</if>
+        	</set>
+        WHERE id=#{id}
+    </update>
+    
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM tb_user
+        WHERE id=#{id}
+    </delete>
+</mapper>
